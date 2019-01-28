@@ -25,6 +25,7 @@ function respond() {
     giphyCommand = '/giphy',
     lmgtfyCommand = '/lmgtfy',
     xkcdCommand = '/xkcd',
+    wolframCommand = '/wolf',
     // Posts a really bad image that can't be removed, ignore this value with Giphy
     bannedHalal = 'halal';
 
@@ -42,7 +43,7 @@ function respond() {
       "/giphy"   Posts a relevant Gif.\n\
       "/xkcd"     Finds a relevant XKCD comic.\n\
       "/lmgtfy" Posts the answer to\n                      stupid questions.\n\
-      "/wolf"    *BETA* Finds Answer on\n                      Wolfram Alpha.\n\
+      "/wolf"    Finds Answer on\n                              Wolfram Alpha.\n\
       "/reddit" *BETA* Posts related\n                      Reddit comment.');
     this.res.end();
 
@@ -68,11 +69,28 @@ function respond() {
     searchXKCD(request.text.substring(xkcdCommand.length + 1));
     this.res.end();
 
+  // Searches Wolfram Alpha and returns the answer to a question
+  } else if(request.text &&
+      request.text.length > wolframCommand.length &&
+      request.text.toLowerCase().substring(1, wolframCommand.length).includes('wolf') === true &&
+      request.text.substring(0, wolframCommand.length) === wolframCommand){
+    this.res.writeHead(200);
+    askWolfram(request.text.substring(wolframCommand.length + 1));
+    this.res.end()
+
 // Do nothing
   } else {
     this.res.writeHead(200);
     this.res.end();
   }
+}
+
+// Query Wolfram API for answer to a question
+function askWolfram(query) {
+  const fetch = require("node-fetch");
+  var url = 'http://api.wolframalpha.com/v2/simple?appid=' + wolfApiKey + '&input=';
+
+  postMessage(url + encodeQuery(query));
 }
 
 // Query Giphy API for a gif
