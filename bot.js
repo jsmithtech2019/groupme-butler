@@ -100,11 +100,7 @@ function askWolfram(query) {
     });
 
     response.on('end', function() {
-      if (!(str && JSON.parse(str).data[0])) {
-        postMessage('Couldn\'t find a solution.');
-      } else {
-        postMessage(JSON.parse(str).data[0]);
-      }
+      postMessage(str);
     });
   }
   HTTP.request(options, callback).end();
