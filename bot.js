@@ -35,7 +35,7 @@ function respond() {
     this.res.end();*/
 
   // Print the usage instructions for the Jenkins Butler
-  } else if(request.text && request.text.substring(0,helpCommand.length) === helpCommand){
+  if(request.text && request.text.substring(0,helpCommand.length) === helpCommand){
     this.res.writeHead(200);
     postMessage('Usage instructions for your Butler:\n\
       "/help"     Posts this help message.\n\
@@ -48,7 +48,7 @@ function respond() {
 
   // Provides a Let Me Google That For You link to the requested query
   } else if(request.text && request.text.length > lmgtfyCommand.length &&
-      request.text.toLowerCase().substring(1, lmgtfyCommand.length).includes('lmgtfy') === true){
+      request.text.substring(0, lmgtfyCommand.length) === lmgtfyCommand){
     this.res.writeHead(200);
     letMeGoogleThatForYou(request.text.substring(lmgtfyCommand.length + 1));
     this.res.end();
@@ -63,7 +63,6 @@ function respond() {
 
   // Searches for a relevant XKCD comic to provided query
   } else if(request.text && request.text.length > xkcdCommand.length &&
-      request.text.toLowerCase().substring(1, xkcdCommand.length).includes('xkcd') === true &&
       request.text.substring(0, xkcdCommand.length) === xkcdCommand){
     this.res.writeHead(200);
     searchXKCD(request.text.substring(xkcdCommand.length + 1));
