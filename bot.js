@@ -29,13 +29,13 @@ function respond() {
     bannedHalal = 'halal';
 
   // Do nothing if there is no text
-  if(!(request.text)){
+  /*if(!(request.text)){
     // Do nothing if there is no text
     this.res.writeHead(200);
-    this.res.end();
+    this.res.end();*/
 
   // Print the usage instructions for the Jenkins Butler
-  } else if(request.text.substring(0,helpCommand.length) === helpCommand){
+  } else if(request.text && request.text.substring(0,helpCommand.length) === helpCommand){
     this.res.writeHead(200);
     postMessage('Usage instructions for your Butler:\n\
       "/help"     Posts this help message.\n\
@@ -47,14 +47,14 @@ function respond() {
     this.res.end();
 
   // Provides a Let Me Google That For You link to the requested query
-  } else if(request.text.length > lmgtfyCommand.length &&
+  } else if(request.text && request.text.length > lmgtfyCommand.length &&
       request.text.toLowerCase().substring(1, lmgtfyCommand.length).includes('lmgtfy') === true){
     this.res.writeHead(200);
     letMeGoogleThatForYou(request.text.substring(lmgtfyCommand.length + 1));
     this.res.end();
 
   // Searches and responds with proper Giphy gif for provided query
-  } else if(request.text.length > giphyCommand.length &&
+  } else if(request.text && request.text.length > giphyCommand.length &&
      request.text.toLowerCase().substring(giphyCommand.length + 1).includes('halal') === 0 &&
      request.text.substring(0, giphyCommand.length) === giphyCommand){
     this.res.writeHead(200);
@@ -62,7 +62,7 @@ function respond() {
     this.res.end();
 
   // Searches for a relevant XKCD comic to provided query
-  } else if(request.text.length > xkcdCommand.length &&
+  } else if(request.text && request.text.length > xkcdCommand.length &&
       request.text.toLowerCase().substring(1, xkcdCommand.length).includes('xkcd') === true &&
       request.text.substring(0, xkcdCommand.length) === xkcdCommand){
     this.res.writeHead(200);
