@@ -104,8 +104,8 @@ function askWolfram(query) {
         console.log(data);
     });
   });
-  request.end();
-  postMessage(wolfRequest);
+  wolfRequest.end();
+  postMessage(data);
 }
 
 // Query Giphy API for a gif
