@@ -87,25 +87,27 @@ function respond() {
 
 // Query Wolfram API for answer to a question
 function askWolfram(query) {
-  const fetch = require("node-fetch");
-  var url = 'http://http://api.wolframalpha.com/v1/result?appid=' + wolfApiKey + '&i=' + encodeQuery(query);
-
   options = {
     hostname: 'api.wolframalpha.com',
     path: '/v1/result?appid=' + wolfApiKey + '&i=' + encodeQuery(query)
   };
 
-  var data = '';
-  var wolfRequest = HTTPS.request(options, function(res) {
-    res.on('data', function (chunk) {
-        data += chunk;
+  var callback = function(response) {
+    var str = '';
+
+    response.on('data', function(chunk){
+      str += chunk;
     });
-    res.on('end', function () {
-        console.log(data);
+
+    response.on('end', function() {
+      if (!(str && JSON.parse(str).data[0])) {
+        postMessage('Couldn\'t find a solution.');
+      } else {
+        postMessage(JSON.parse(str).data[0]);
+      }
     });
-  });
-  wolfRequest.end();
-  postMessage(data);
+  }
+  HTTP.request(options, callback).end();
 }
 
 // Query Giphy API for a gif
