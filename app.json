@@ -1,7 +1,7 @@
 {
   "name": "Groupme Butler",
   "description": "Simple app for Groupme written in Node",
-  "repository": "https://github.com/jsmithtech2019/groupme-butler",
+  "repository": "",
   "logo": "http://node-js-sample.herokuapp.com/node.svg",
   "keywords": ["node", "express", "static"],
   "image": "heroku/nodejs"
