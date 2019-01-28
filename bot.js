@@ -43,7 +43,7 @@ function respond() {
       "/giphy"   Posts a relevant Gif.\n\
       "/xkcd"     Finds a relevant XKCD comic.\n\
       "/lmgtfy" Posts the answer to\n                      stupid questions.\n\
-      "/wolf"    Finds Answer on\n                              Wolfram Alpha.\n\
+      "/wolf"    Finds Answer on\n                         Wolfram Alpha.\n\
       "/reddit" *BETA* Posts related\n                      Reddit comment.');
     this.res.end();
 
@@ -87,10 +87,27 @@ function respond() {
 
 // Query Wolfram API for answer to a question
 function askWolfram(query) {
-  const fetch = require("node-fetch");
-  var url = 'http://api.wolframalpha.com/v2/simple?appid=' + wolfApiKey + '&input=';
+  options = {
+    hostname: 'api.wolframalpha.com',
+    path: '/v1/result?appid=' + wolfApiKey + '&i=' + encodeQuery(query)
+  };
 
-  postMessage(url + encodeQuery(query));
+  var callback = function(response) {
+    var str = '';
+
+    response.on('data', function(chunk){
+      str += chunk;
+    });
+
+    response.on('end', function() {
+      if (!(str && JSON.parse(str).data[0])) {
+        postMessage('Couldn\'t find a solution.');
+      } else {
+        postMessage(JSON.parse(str).data[0]);
+      }
+    });
+  }
+  HTTP.request(options, callback).end();
 }
 
 // Query Giphy API for a gif
