@@ -95,8 +95,8 @@ function askWolfram(query) {
     path: '/'
   };
 
+  var data = '';
   var wolfRequest = HTTPS.request(options, function(res) {
-    var data = '';
     res.on('data', function (chunk) {
         data += chunk;
     });
