@@ -35,7 +35,7 @@ function respond() {
     this.res.end();*/
 
   // Print the usage instructions for the Jenkins Butler
-  if(request.text && request.text.substring(0,helpCommand.length) === helpCommand){
+  if(request.text && request.text.substring(0, helpCommand.length) === helpCommand){
     this.res.writeHead(200);
     postMessage('Usage instructions for your Butler:\n\
       "/help"     Posts this help message.\n\
@@ -55,7 +55,7 @@ function respond() {
 
   // Searches and responds with proper Giphy gif for provided query
   } else if(request.text && request.text.length > giphyCommand.length &&
-     request.text.toLowerCase().substring(giphyCommand.length + 1).includes('halal') === 0 &&
+     request.text.toLowerCase().substring(giphyCommand.length + 1).includes('halal') == 0 &&
      request.text.substring(0, giphyCommand.length) === giphyCommand){
     this.res.writeHead(200);
     searchGiphy(request.text.substring(giphyCommand.length + 1));
