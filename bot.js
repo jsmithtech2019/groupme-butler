@@ -91,8 +91,8 @@ function askWolfram(query) {
   var url = 'http://http://api.wolframalpha.com/v1/result?appid=' + wolfApiKey + '&i=' + encodeQuery(query);
 
   options = {
-    hostname: 'api.wolframalpha.com/v1/result?appid=' + wolfApiKey + '&i=' + encodeQuery(query),
-    path: '/'
+    hostname: 'api.wolframalpha.com',
+    path: '/v1/result?appid=' + wolfApiKey + '&i=' + encodeQuery(query)
   };
 
   var data = '';
