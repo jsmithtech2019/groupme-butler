@@ -110,7 +110,7 @@ function askWolfram(query) {
 function searchGiphy(giphyToSearch) {
   var options = {
     host: 'api.giphy.com',
-    path: '/v1/gifs/search?api_key=' + apiKey + '&offset=' + random_int(19) '&q=' + encodeQuery(giphyToSearch) ;
+    path: '/v1/gifs/search?api_key=' + apiKey + '&offset=' + random_int(19) + '&q=' + encodeQuery(giphyToSearch) ;
   };
 
   var callback = function(response) {
