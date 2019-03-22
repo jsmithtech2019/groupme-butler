@@ -45,7 +45,7 @@ function respond() {
       "/xkcd"     Finds a relevant XKCD comic.\n\
       "/lmgtfy" Posts the answer to\n                      stupid questions.\n\
       "/wolf"    Finds Answer on\n                              Wolfram Alpha.\n\
-      "/tag"     Tags a group of users.\n
+      "/tag"     Tags a group of users.\n\
       "/reddit" *BETA* Posts related\n                      Reddit comment.');
     this.res.end();
 
