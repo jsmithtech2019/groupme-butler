@@ -84,7 +84,7 @@ function respond() {
       request.text.toLowerCase().substring(1, tagCommand.length).includes('tag') === true &&
       request.text.substring(0, tagCommand.length) === tagCommand){
     this.res.writeHead(200);
-    tag(request.text.substring(tag.length + 1));
+    tagAll(request.text.substring(tag.length + 1));
     this.res.end()
 
   // Do nothing
@@ -116,7 +116,7 @@ function askWolfram(query) {
 }
 
 // Tag a set of users in the chat
-function tagCommand(user) {
+function tagAll(user) {
   let body = {
            "attachments": [{
                     "loci": [],
