@@ -26,6 +26,7 @@ function respond() {
     lmgtfyCommand = '/lmgtfy',
     xkcdCommand = '/xkcd',
     wolframCommand = '/wolf',
+    tagCommand = '/tag',
     // Posts a really bad image that can't be removed, ignore this value with Giphy
     bannedHalal = 'halal';
 
@@ -44,6 +45,7 @@ function respond() {
       "/xkcd"     Finds a relevant XKCD comic.\n\
       "/lmgtfy" Posts the answer to\n                      stupid questions.\n\
       "/wolf"    Finds Answer on\n                              Wolfram Alpha.\n\
+      "/tag"     Tags a group of users.\n
       "/reddit" *BETA* Posts related\n                      Reddit comment.');
     this.res.end();
 
@@ -77,8 +79,15 @@ function respond() {
     this.res.writeHead(200);
     askWolfram(request.text.substring(wolframCommand.length + 1));
     this.res.end()
+  } else if(request.text && 
+      request.text.length > tagCommand.length &&
+      request.text.toLowerCase().substring(1, tagCommand.length).includes('tag') === true &&
+      request.text.substring(0, tagCommand.length) === tagCommand){
+    this.res.writeHead(200);
+    tag(request.text.substring(tag.length + 1));
+    this.res.end()
 
-// Do nothing
+  // Do nothing
   } else {
     this.res.writeHead(200);
     this.res.end();
@@ -104,6 +113,28 @@ function askWolfram(query) {
     });
   }
   HTTP.request(options, callback).end();
+}
+
+// Tag a set of users in the chat
+function tagCommand(user) {
+  let body = {
+           "attachments": [{
+                    "loci": [],
+                    "type": "mentions",
+                    "user_ids": []
+           }]
+  };
+  
+  body.attachments[0].user_ids.push("20680811");
+  body.attachments[0].loci.push([0,3]);
+  postMessage(body);
+  // Get all members
+  //try {
+  //    let resp = await rp({
+	//		        method: 'GET',
+	//		        url: `https://api.groupme.com/v3/groups/` + botID + `?token=${config.ACCESS_TOKEN}`,
+	//		        json: true
+	//	  });
 }
 
 // Query Giphy API for a gif
