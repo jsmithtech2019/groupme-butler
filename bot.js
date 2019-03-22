@@ -84,7 +84,7 @@ function respond() {
       request.text.toLowerCase().substring(1, tagCommand.length).includes('tag') === true &&
       request.text.substring(0, tagCommand.length) === tagCommand){
     this.res.writeHead(200);
-    tagAll(request.text.substring(tag.length + 1));
+    tagAll(request.text.substring(tagCommand.length + 1));
     this.res.end()
 
   // Do nothing
