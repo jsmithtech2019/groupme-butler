@@ -79,9 +79,9 @@ function respond() {
     this.res.end()
 
   // Does Jenkins stuff
-  } else if(request.text && request.text.length > 'jenkins'.length &&
-            request.text.toLowerCase().substring(1, 'jenkins'.length).includes('jenkins') === true &&
-            request.text.substring(0, 'jenkins'.length) === '/jenkins'){
+  } else if(request.text &&
+            request.text.toLowerCase().substring(1, '/jenkins'.length).includes('jenkins') === true &&
+            request.text.toLowerCase().substring(0, '/jenkins'.length) === '/jenkins'){
     this.res.writeHead(200);
     postMessage('You rang sir?');
     this.res.end();
