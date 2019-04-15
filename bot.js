@@ -28,6 +28,14 @@ function respond() {
     wolframCommand = '/wolf',
     // Posts a really bad image that can't be removed, ignore this value with Giphy
     bannedHalal = 'halal';
+  var butlerJokes = ['You rang sir?',
+                     'Those who choose to be servants know the most about being free.',
+                     'Am I really the only servant here?',
+                     'You can\'t unfry an egg, sir.',
+                     'Who employees butlers anymore?',
+                     'I see nothing, I hear nothing, I only serve.',
+                     'Good evening, Colonel. Can I give you a lift?',
+                     'You are not authorized to access this area.'];
 
   // Do nothing if there is no text
   /*if(!(request.text)){
@@ -83,7 +91,7 @@ function respond() {
             request.text.toLowerCase().substring(1, '/jenkins'.length).includes('jenkins') === true &&
             request.text.toLowerCase().substring(0, '/jenkins'.length) === '/jenkins'){
     this.res.writeHead(200);
-    postMessage('You rang sir?');
+    postMessage(butlerJokes[Math.floor(Math.random() * myArray.length)]);
     this.res.end();
 
   // Do nothing
