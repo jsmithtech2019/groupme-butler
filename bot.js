@@ -85,7 +85,6 @@ function respond() {
     this.res.writeHead(200);
     postMessage('You rang sir?');
     this.res.end();
-  }
 
   // Do nothing
   } else {
