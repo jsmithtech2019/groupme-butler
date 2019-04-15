@@ -91,7 +91,7 @@ function respond() {
             request.text.toLowerCase().substring(1, '/jenkins'.length).includes('jenkins') === true &&
             request.text.toLowerCase().substring(0, '/jenkins'.length) === '/jenkins'){
     this.res.writeHead(200);
-    postMessage(butlerJokes[Math.floor(Math.random() * myArray.length)]);
+    postMessage(butlerJokes[Math.floor(Math.random() * butlerJokes.length)]);
     this.res.end();
 
   // Do nothing
