@@ -68,24 +68,32 @@ function parse() {
         this.res.end();
         break;
       case lmgtfyCommand:
+        this.res.writeHead(200);
         letMeGoogleThatForYou(request.text.substring(lmgtfyCommand.length + 1))
+        this.res.end();
         break;
       case giphyCommand:
         // Ensure an image was requested and not just the command
         if(request.text.length > giphyCommand.length + 1){
+          this.res.writeHead(200);
           searchGiphy(request.text.substring(giphyCommand.length + 1));
+          this.res.end();
         }
         break;
       case xkcdCommand:
         // Ensure a comic was requested and not just a blank command
         if(request.text.length > xkcdCommand.length + 1){
+          this.res.writeHead(200);
           searchXKCD(request.text.substring(xkcdCommand.length + 1));
+          this.res.end();
         }
         break;
       case wolframCommand:
         // Ensure a request was made and not just a blank command
         if(request.text.length > wolframCommand.length + 1){
+          this.res.writeHead(200);
           askWolfram(request.text.substring(wolframCommand.length + 1));
+          this.res.end();
         }
         break;
       case clearCommand:
@@ -117,7 +125,6 @@ function parse() {
     this.res.writeHead(200);
     this.res.end();
   }
-
 }
 
 // Query Giphy API for a gif
@@ -140,10 +147,7 @@ function searchGiphy(giphyToSearch) {
       } else {
         var id = JSON.parse(str).data[0].id;
         var giphyURL = 'http://i.giphy.com/' + id + '.gif';
-
-        this.res.writeHead(200);
         postMessage(giphyURL);
-        this.res.end();
       }
     });
   };
@@ -160,10 +164,7 @@ function searchXKCD(query) {
     .then(res => {
       n = res.lastIndexOf('/');
       res = res.substring(n + 1);
-
-      this.res.writeHead(200);
       postMessage('https://imgs.xkcd.com/comics/' + res);
-      this.res.end();
     })
     .catch(err => postMessage('Could not find a relevant xkcd'));
 }
@@ -183,9 +184,7 @@ function askWolfram(query) {
     });
 
     response.on('end', function() {
-      this.res.writeHead(200);
       postMessage(str);
-      this.res.end();
     });
   }
   HTTP.request(options, callback).end();
@@ -194,10 +193,7 @@ function askWolfram(query) {
 // Create a sassy response (URL) to a dumb question
 function letMeGoogleThatForYou(textToGoogle) {
   var lmgtfyURL = 'http://lmgtfy.com/?q=' + encodeQuery(textToGoogle);
-
-  this.res.writeHead(200);
   postMessage(lmgtfyURL);
-  this.res.end();
 }
 
 // Generate random integer between 0 and input param
@@ -212,9 +208,7 @@ function encodeQuery(query) {
 
 // Post message to the Groupme chat
 function postMessage(message) {
-  var botResponse, options, body, botReq;
-
-  botResponse = message;
+  var options, body, botReq, botResponse = message;
 
   options = {
     hostname: 'api.groupme.com',
