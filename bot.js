@@ -40,7 +40,7 @@ var helpMessage = 'Usage instructions for your Butler:\n\
   "/giphy"   Posts a relevant Gif.\n\
   "/xkcd"    Finds a relevant XKCD comic.\n\
   "/clear"   Clears the chat history.\n\
-  "/lmgtfy" Posts the answer to stupid questions.\n\
+  "/lmgtfy" Posts dumb question response.\n\
   "/wolf"    Finds Answer on Wolfram Alpha.\n\
   "/reddit" *BETA* Posts related\n                      Reddit comment.';
 
