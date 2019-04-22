@@ -70,7 +70,6 @@ function parse() {
       case lmgtfyCommand:
         this.res.writeHead(200);
         letMeGoogleThatForYou(request.text.substring(lmgtfyCommand.length + 1))
-        this.res.end();
         break;
       case giphyCommand:
         // Ensure an image was requested and not just the command
@@ -147,6 +146,7 @@ function searchGiphy(giphyToSearch) {
       } else {
         var id = JSON.parse(str).data[0].id;
         var giphyURL = 'http://i.giphy.com/' + id + '.gif';
+
         postMessage(giphyURL);
       }
     });
@@ -164,6 +164,7 @@ function searchXKCD(query) {
     .then(res => {
       n = res.lastIndexOf('/');
       res = res.substring(n + 1);
+
       postMessage('https://imgs.xkcd.com/comics/' + res);
     })
     .catch(err => postMessage('Could not find a relevant xkcd'));
@@ -196,6 +197,7 @@ function askWolfram(query) {
 // Create a sassy response (URL) to a dumb question
 function letMeGoogleThatForYou(textToGoogle) {
   var lmgtfyURL = 'http://lmgtfy.com/?q=' + encodeQuery(textToGoogle);
+
   postMessage(lmgtfyURL);
 }
 
