@@ -99,7 +99,7 @@ function parse() {
       case clearCommand:
         this.res.writeHead(200);
         // Buffer is returns 19 on Iphone 7
-        postMessage(" /n/n/n/n/n/n/n/n/n/n/n/n/n/n/n/n/n/n/n/nChat cleared.");
+        postMessage("/n"+"/n"+"/n"+"/n"+"/n"+"/n"+"/n"+"/n"+"/n"+"/n"+"/n"+"/n"+"/n"+"/n"+"/n"+"/n"+"/n"+"/n"+"/n");
         this.res.end();
         break;
       case allCommand:
