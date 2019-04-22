@@ -38,8 +38,8 @@ var butlerJokes = ['You rang sir?',
 var helpMessage = 'Usage instructions for your Butler:\n\
   "/help"     Posts this help message.\n\
   "/giphy"   Posts a relevant Gif.\n\
-  "/xkcd"     Finds a relevant XKCD comic.\n\
-  "/clear"   Clears the chat history from view.\n\
+  "/xkcd"    Finds a relevant XKCD comic.\n\
+  "/clear"   Clears the chat history.\n\
   "/lmgtfy" Posts the answer to stupid questions.\n\
   "/wolf"    Finds Answer on Wolfram Alpha.\n\
   "/reddit" *BETA* Posts related\n                      Reddit comment.';
