@@ -13,85 +13,159 @@ var apiKey = process.env.GIPHY_API_KEY;
 // API key for Wolfram Alpha
 var wolfApiKey = process.env.WOLFRAM_APP_ID;
 
+// Collection of commands that Jenkins can be triggered on
+// Longest command length is 7 characters
+var helpCommand = '/help';
+var giphyCommand = '/giphy';
+var lmgtfyCommand = '/lmgtfy';
+var xkcdCommand = '/xkcd';
+var wolframCommand = '/wolf';
+var jenkinsCommand = '/jenkins';
+var clearCommand = '/clear';
+var allCommand = '/all';
 
+// Array of different butler statements
+var butlerJokes = ['You rang sir?',
+                     'Those who choose to be servants know the most about being free.',
+                     'Am I really the only servant here?',
+                     'You can\'t unfry an egg, sir.',
+                     'Who employees butlers anymore?',
+                     'I see nothing, I hear nothing, I only serve.',
+                     'Good evening, Colonel. Can I give you a lift?',
+                     'You are not authorized to access this area.'];
+
+// Help message for bot usage
+var helpMessage = 'Usage instructions for your Butler:\n\
+        "/help"     Posts this help message.\n\
+        "/giphy"   Posts a relevant Gif.\n\
+        "/xkcd"     Finds a relevant XKCD comic.\n\
+        "/clear"   Clears the chat history from view.\n\
+        "/lmgtfy" Posts the answer to\n                      stupid questions.\n\
+        "/wolf"    Finds Answer on\n                         Wolfram Alpha.\n\
+        "/reddit" *BETA* Posts related\n                      Reddit comment.';
+
+// Posts a really bad image that can't be removed, ignore this value with Giphy
+var bannedHalal = 'halal';
+
+// Confused Nick Young Face Image
+var confusedNickYoung = 'https://i.kym-cdn.com/entries/icons/mobile/000/018/489/nick-young-confused-face-300x256-nqlyaa.jpg';
 
 //************************** Methods *****************************************
 // Main function that parses input from Groupme users
-function respond() {
+function parse() {
+  var request = JSON.parse(this.req.chunks[0])
+  var command = ''
+  // Verify there is text in the message (not an image or blank)
+  if (request.text){
+    // Grab only first word of the request
+    command = request.text.toLowerCase().replace(/ .*/,'');
 
-  // Accepted commands by the bot
-  var request = JSON.parse(this.req.chunks[0]),
-    helpCommand = '/help',
-    giphyCommand = '/giphy',
-    lmgtfyCommand = '/lmgtfy',
-    xkcdCommand = '/xkcd',
-    wolframCommand = '/wolf',
-    tagCommand = '/tag',
-    // Posts a really bad image that can't be removed, ignore this value with Giphy
-    bannedHalal = 'halal';
+    // Parse to find the proper function to reply with
+    switch(command) {
+      case helpCommand:
+        this.res.writeHead(200);
+        postMessage(helpMessage);
+        this.res.end();
+        break;
+      case lmgtfyCommand:
+        letMeGoogleThatForYou(request.text.substring(lmgtfyCommand.length + 1))
+        break;
+      case giphyCommand:
+        // Ensure an image was requested and not just the command
+        if(request.text.length > giphyCommand.length + 1){
+          searchGiphy(request.text.substring(giphyCommand.length + 1));
+        }
+        break;
+      case xkcdCommand:
+        // Ensure a comic was requested and not just a blank command
+        if(request.text.length > xkcdCommand.length + 1){
+          searchXKCD(request.text.substring(xkcdCommand.length + 1));
+        }
+        break;
+      case wolframCommand:
+        // Ensure a request was made and not just a blank command
+        if(request.text.length > wolframCommand.length + 1){
+          askWolfram(request.text.substring(wolframCommand.length + 1));
+        }
+        break;
+      case clearCommand:
+        this.res.writeHead(200);
+        // Buffer is returns 19 on Iphone 7
+        postMessage('/n/n/n/n/n/n/n/n/n/n/n/n/n/n/n/n/n/n/n/n');
+        this.res.end();
+        break;
+      case allCommand:
+        // Not yet implemented, need a database of active user ID's up first
+        break;
+      case jenkinsCommand:
+        this.res.writeHead(200);
+        postMessage(butlerJokes[Math.floor(Math.random() * butlerJokes.length)]);
+        this.res.end();
+        break;
+    }
+  }
 
-  // Do nothing if there is no text
-  /*if(!(request.text)){
-    // Do nothing if there is no text
+  // Post Confused Nick Young if anyone says 'wut' in the chat
+  else if (request.text.toLowerCase().includes('wut')) {
     this.res.writeHead(200);
-    this.res.end();*/
-
-  // Print the usage instructions for the Jenkins Butler
-  if(request.text && request.text.substring(0, helpCommand.length) === helpCommand){
-    this.res.writeHead(200);
-    postMessage('Usage instructions for your Butler:\n\
-      "/help"     Posts this help message.\n\
-      "/giphy"   Posts a relevant Gif.\n\
-      "/xkcd"     Finds a relevant XKCD comic.\n\
-      "/lmgtfy" Posts the answer to\n                      stupid questions.\n\
-      "/wolf"    Finds Answer on\n                              Wolfram Alpha.\n\
-      "/tag"     Tags a group of users.\n\
-      "/reddit" *BETA* Posts related\n                      Reddit comment.');
+    postMessage(confusedNickYoung);
     this.res.end();
+  }
 
-  // Provides a Let Me Google That For You link to the requested query
-  } else if(request.text && request.text.length > lmgtfyCommand.length &&
-      request.text.substring(0, lmgtfyCommand.length) === lmgtfyCommand){
-    this.res.writeHead(200);
-    letMeGoogleThatForYou(request.text.substring(lmgtfyCommand.length + 1));
-    this.res.end();
-
-  // Searches and responds with proper Giphy gif for provided query
-  } else if(request.text && request.text.length > giphyCommand.length &&
-     request.text.toLowerCase().substring(giphyCommand.length + 1).includes('halal') == 0 &&
-     request.text.substring(0, giphyCommand.length) === giphyCommand){
-    this.res.writeHead(200);
-    searchGiphy(request.text.substring(giphyCommand.length + 1));
-    this.res.end();
-
-  // Searches for a relevant XKCD comic to provided query
-  } else if(request.text && request.text.length > xkcdCommand.length &&
-      request.text.substring(0, xkcdCommand.length) === xkcdCommand){
-    this.res.writeHead(200);
-    searchXKCD(request.text.substring(xkcdCommand.length + 1));
-    this.res.end();
-
-  // Searches Wolfram Alpha and returns the answer to a question
-  } else if(request.text &&
-      request.text.length > wolframCommand.length &&
-      request.text.toLowerCase().substring(1, wolframCommand.length).includes('wolf') === true &&
-      request.text.substring(0, wolframCommand.length) === wolframCommand){
-    this.res.writeHead(200);
-    askWolfram(request.text.substring(wolframCommand.length + 1));
-    this.res.end()
-  } else if(request.text && 
-      request.text.length > tagCommand.length &&
-      request.text.toLowerCase().substring(1, tagCommand.length).includes('tag') === true &&
-      request.text.substring(0, tagCommand.length) === tagCommand){
-    this.res.writeHead(200);
-    tagAll(request.text.substring(tagCommand.length + 1));
-    this.res.end()
-
-  // Do nothing
-  } else {
+  else {
+    // Do nothing
     this.res.writeHead(200);
     this.res.end();
   }
+
+}
+
+// Query Giphy API for a gif
+function searchGiphy(giphyToSearch) {
+  var options = {
+    host: 'api.giphy.com',
+    path: '/v1/gifs/search?api_key=' + apiKey + '&q=' + encodeQuery(giphyToSearch)
+  };
+
+  var callback = function(response) {
+    var str = '';
+
+    response.on('data', function(chunk){
+      str += chunk;
+    });
+
+    response.on('end', function() {
+      if (!(str && JSON.parse(str).data[0])) {
+        postMessage('Couldn\'t find a gif 💩');
+      } else {
+        var id = JSON.parse(str).data[0].id;
+        var giphyURL = 'http://i.giphy.com/' + id + '.gif';
+
+        this.res.writeHead(200);
+        postMessage(giphyURL);
+        this.res.end();
+      }
+    });
+  };
+  HTTP.request(options, callback).end();
+}
+
+// Query RelevantXKCD to get a comic
+function searchXKCD(query) {
+  var xkcdRelatedUrl = 'https://relevantxkcd.appspot.com/process?action=xkcd&query=' + encodeQuery(query);
+  const request = require('superagent');
+
+  request.get(xkcdRelatedUrl)
+    .then(res => res.text.split(' ').slice(3)[0].trim())
+    .then(res => {
+      n = res.lastIndexOf('/');
+      res = res.substring(n + 1);
+
+      this.res.writeHead(200);
+      postMessage('https://imgs.xkcd.com/comics/' + res);
+      this.res.end();
+    })
+    .catch(err => postMessage('Could not find a relevant xkcd'));
 }
 
 // Query Wolfram API for answer to a question
@@ -109,80 +183,21 @@ function askWolfram(query) {
     });
 
     response.on('end', function() {
+      this.res.writeHead(200);
       postMessage(str);
+      this.res.end();
     });
   }
   HTTP.request(options, callback).end();
 }
 
-// Tag a set of users in the chat
-function tagAll(user) {
-  let body = {
-           "attachments": [{
-                    "loci": [],
-                    "type": "mentions",
-                    "user_ids": []
-           }]
-  };
-  
-  body.attachments[0].user_ids.push("20680811");
-  body.attachments[0].loci.push([0,3]);
-  postMessage(body);
-  // Get all members
-  //try {
-  //    let resp = await rp({
-	//		        method: 'GET',
-	//		        url: `https://api.groupme.com/v3/groups/` + botID + `?token=${config.ACCESS_TOKEN}`,
-	//		        json: true
-	//	  });
-}
-
-// Query Giphy API for a gif
-function searchGiphy(giphyToSearch) {
-  var options = {
-    host: 'api.giphy.com',
-    path: '/v1/gifs/search?api_key=' + apiKey + '&offset=' + random_int(19) + '&q=' + encodeQuery(giphyToSearch)
-  };
-
-  var callback = function(response) {
-    var str = '';
-
-    response.on('data', function(chunk){
-      str += chunk;
-    });
-
-    response.on('end', function() {
-      if (!(str && JSON.parse(str).data[0])) {
-        postMessage('Couldn\'t find a gif 💩');
-      } else {
-        var id = JSON.parse(str).data[0].id;
-        var giphyURL = 'http://i.giphy.com/' + id + '.gif';
-        postMessage(giphyURL);
-      }
-    });
-  };
-  HTTP.request(options, callback).end();
-}
-
-// Query RelevantXKCD to get a comic
-function searchXKCD(query) {
-  var xkcdRelatedUrl = 'https://relevantxkcd.appspot.com/process?action=xkcd&query=' + encodeQuery(query);
-  const request = require('superagent');
-
-  request.get(xkcdRelatedUrl)
-    .then(res => res.text.split(' ').slice(3)[0].trim())
-    .then(res => {
-      n = res.lastIndexOf('/');
-      res = res.substring(n + 1);
-      postMessage('https://imgs.xkcd.com/comics/' + res);
-    })
-    .catch(err => postMessage('Could not find a relevant xkcd'));
-}
-
 // Create a sassy response (URL) to a dumb question
 function letMeGoogleThatForYou(textToGoogle) {
   var lmgtfyURL = 'http://lmgtfy.com/?q=' + encodeQuery(textToGoogle);
+
+  this.res.writeHead(200);
   postMessage(lmgtfyURL);
+  this.res.end();
 }
 
 // Generate random integer between 0 and input param
@@ -231,4 +246,4 @@ function postMessage(message) {
   botReq.end(JSON.stringify(body));
 }
 
-exports.respond = respond;
+exports.parse = parse;
