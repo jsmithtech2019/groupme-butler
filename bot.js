@@ -171,6 +171,9 @@ function searchXKCD(query) {
 
 // Query Wolfram API for answer to a question
 function askWolfram(query) {
+  // Replace '+' with 'plus' to avoid misreadings
+  query = query.split('+').join('plus');
+
   options = {
     hostname: 'api.wolframalpha.com',
     path: '/v1/result?appid=' + wolfApiKey + '&i=' + encodeQuery(query)
