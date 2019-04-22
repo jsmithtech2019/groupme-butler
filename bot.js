@@ -36,13 +36,13 @@ var butlerJokes = ['You rang sir?',
 
 // Help message for bot usage
 var helpMessage = 'Usage instructions for your Butler:\n\
-        "/help"     Posts this help message.\n\
-        "/giphy"   Posts a relevant Gif.\n\
-        "/xkcd"     Finds a relevant XKCD comic.\n\
-        "/clear"   Clears the chat history from view.\n\
-        "/lmgtfy" Posts the answer to\n                      stupid questions.\n\
-        "/wolf"    Finds Answer on\n                         Wolfram Alpha.\n\
-        "/reddit" *BETA* Posts related\n                      Reddit comment.';
+    "/help"     Posts this help message.\n\
+    "/giphy"   Posts a relevant Gif.\n\
+    "/xkcd"     Finds a relevant XKCD comic.\n\
+    "/clear"   Clears the chat history from view.\n\
+    "/lmgtfy" Posts the answer to\n                      stupid questions.\n\
+    "/wolf"    Finds Answer on\n                         Wolfram Alpha.\n\
+    "/reddit" *BETA* Posts related\n                      Reddit comment.';
 
 // Posts a really bad image that can't be removed, ignore this value with Giphy
 var bannedHalal = 'halal';
