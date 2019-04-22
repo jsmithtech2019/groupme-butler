@@ -98,8 +98,8 @@ function parse() {
         break;
       case clearCommand:
         this.res.writeHead(200);
-        // Buffer is returns 19 on Iphone 7
-        postMessage(" \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChat cleared.");
+        // Buffer is returns 34 on Iphone XS Max
+        postMessage(" \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChat cleared.");
         this.res.end();
         break;
       case allCommand:
