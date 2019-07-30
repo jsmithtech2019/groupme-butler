@@ -75,7 +75,9 @@ function parse() {
         postMessage(helpMessage);
         break;
       case lmgtfyCommand:
-        letMeGoogleThatForYou(request.text.substring(lmgtfyCommand.length + 1))
+        if(request.text.length > lmgtfyCommand.length + 1){
+          letMeGoogleThatForYou(request.text.substring(lmgtfyCommand.length + 1));
+        }
         break;
       case giphyCommand:
         // Ensure an image was requested and not just the command
@@ -205,6 +207,8 @@ function postMessage(message) {
     hostname: 'api.groupme.com',
     path: '/v3/bots/post',
     method: 'POST'
+    // For tagging changes
+    //args
   };
 
   body = {
@@ -232,3 +236,31 @@ function postMessage(message) {
 }
 
 exports.parse = parse;
+
+
+// Testing @all chat capabilities using postgres.
+/*const { Client } = require('pg');
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
+
+client.connect();
+
+client.query('SELECT user_id FROM user_db;', (err, res) => {
+  var str = '[{"type":"mentions","user_ids":[';
+  if (err) throw err;
+  for (let row of res.rows) {
+    // Return needs to be parsed and sent as objects with @name and user_id
+    // should the name change.
+    //"attachments":[{"type":"mentions","user_ids":["17152696"]}]
+    str.concat('"' + row + '",');
+  }
+  // Drop last comma
+  str = str.slice(0, -1);
+  // Add final packaging
+  str.concat(']}]');
+  postMessage('@all', str)
+  client.end();
+});*/
