@@ -55,6 +55,10 @@ var confusedNickYoung = 'https://i.kym-cdn.com/entries/icons/mobile/000/018/489/
 function parse() {
   var request = JSON.parse(this.req.chunks[0])
   var command = ''
+
+  // Prep the response buffer.
+  this.res.writeHead(200);
+
   // Verify there is text in the message (not an image or blank)
   if (request.text){
     // Grab only first word of the request
@@ -63,67 +67,49 @@ function parse() {
     // Parse to find the proper function to reply with
     switch(command) {
       case helpCommand:
-        this.res.writeHead(200);
         postMessage(helpMessage);
-        this.res.end();
         break;
       case lmgtfyCommand:
-        this.res.writeHead(200);
         letMeGoogleThatForYou(request.text.substring(lmgtfyCommand.length + 1))
         break;
       case giphyCommand:
         // Ensure an image was requested and not just the command
         if(request.text.length > giphyCommand.length + 1){
-          this.res.writeHead(200);
           searchGiphy(request.text.substring(giphyCommand.length + 1));
-          this.res.end();
         }
         break;
       case xkcdCommand:
         // Ensure a comic was requested and not just a blank command
         if(request.text.length > xkcdCommand.length + 1){
-          this.res.writeHead(200);
           searchXKCD(request.text.substring(xkcdCommand.length + 1));
-          this.res.end();
         }
         break;
       case wolframCommand:
         // Ensure a request was made and not just a blank command
         if(request.text.length > wolframCommand.length + 1){
-          this.res.writeHead(200);
           askWolfram(request.text.substring(wolframCommand.length + 1));
-          this.res.end();
         }
         break;
       case clearCommand:
-        this.res.writeHead(200);
         // Buffer is returns 34 on Iphone XS Max
         postMessage(" \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChat cleared.");
-        this.res.end();
         break;
       case allCommand:
         // Not yet implemented, need a database of active user ID's up first
         break;
       case jenkinsCommand:
-        this.res.writeHead(200);
         postMessage(butlerJokes[Math.floor(Math.random() * butlerJokes.length)]);
-        this.res.end();
         break;
     }
   }
 
   // Post Confused Nick Young if anyone says 'wut' in the chat
   else if (request.text.toLowerCase().includes('wut')) {
-    this.res.writeHead(200);
     postMessage(confusedNickYoung);
-    this.res.end();
   }
 
-  else {
-    // Do nothing
-    this.res.writeHead(200);
-    this.res.end();
-  }
+  // End the response.
+  this.res.end();
 }
 
 // Query Giphy API for a gif
