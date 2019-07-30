@@ -59,8 +59,13 @@ function parse() {
   // Prep the response buffer.
   this.res.writeHead(200);
 
+  // Post Confused Nick Young if anyone says 'wut' in the chat
+  if (request.text.toLowerCase().includes('wut')) {
+    postMessage(confusedNickYoung);
+  }
+
   // Verify there is text in the message (not an image or blank)
-  if (request.text){
+  else if (request.text){
     // Grab only first word of the request
     command = request.text.toLowerCase().replace(/ .*/,'');
 
@@ -101,11 +106,6 @@ function parse() {
         postMessage(butlerJokes[Math.floor(Math.random() * butlerJokes.length)]);
         break;
     }
-  }
-
-  // Post Confused Nick Young if anyone says 'wut' in the chat
-  else if (request.text.toLowerCase().includes('wut')) {
-    postMessage(confusedNickYoung);
   }
 
   // End the response.
