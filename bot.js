@@ -23,6 +23,7 @@ var wolframCommand = '/wolf';
 var jenkinsCommand = '/jenkins';
 var clearCommand = '/clear';
 var allCommand = '/all';
+var mitchEasterEgg = '/mitch';
 
 // Array of different butler statements
 var butlerJokes = ['You rang sir?',
@@ -49,6 +50,9 @@ var bannedHalal = 'halal';
 
 // Confused Nick Young Face Image
 var confusedNickYoung = 'https://i.kym-cdn.com/entries/icons/mobile/000/018/489/nick-young-confused-face-300x256-nqlyaa.jpg';
+
+// Mitch face
+var mitchFace = 'https://i.imgur.com/0HirwrK.jpg';
 
 //************************** Methods *****************************************
 // Main function that parses input from Groupme users
@@ -106,6 +110,9 @@ function parse() {
         break;
       case jenkinsCommand:
         postMessage(butlerJokes[Math.floor(Math.random() * butlerJokes.length)]);
+        break;
+      case mitchEasterEgg:
+        postMessage(mitchFace);
         break;
     }
   }
