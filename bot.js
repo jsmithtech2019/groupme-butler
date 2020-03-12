@@ -19,11 +19,13 @@ var helpCommand = '/help';
 var giphyCommand = '/giphy';
 var lmgtfyCommand = '/lmgtfy';
 var xkcdCommand = '/xkcd';
+var gitCommit = '/commit';
 var wolframCommand = '/wolf';
 var jenkinsCommand = '/jenkins';
 var clearCommand = '/clear';
 var allCommand = '/all';
 var mitchEasterEgg = '/mitch';
+var margEasterEgg = 'margs';
 
 // Array of different butler statements
 var butlerJokes = ['You rang sir?',
@@ -43,6 +45,7 @@ var helpMessage = 'Usage instructions for your Butler:\n\
   "/clear"   Clears the chat history.\n\
   "/lmgtfy" Posts dumb question response.\n\
   "/wolf"    Finds Answer on Wolfram Alpha.\n\
+  "/commit" Posts a random git commit.\n\
   "/reddit" *BETA* Posts related\n                      Reddit comment.';
 
 // Posts a really bad image that can't be removed, ignore this value with Giphy
@@ -53,6 +56,9 @@ var confusedNickYoung = 'https://i.kym-cdn.com/entries/icons/mobile/000/018/489/
 
 // Mitch face
 var mitchFace = 'https://i.imgur.com/0HirwrK.jpg';
+
+// Margarita image
+var margaritaImage = 'https://i.imgur.com/4SbhSbY.jpeg';
 
 //************************** Methods *****************************************
 // Main function that parses input from Groupme users
@@ -66,6 +72,11 @@ function parse() {
   // Post Confused Nick Young if anyone says 'wut' in the chat
   if (request.text.toLowerCase().includes('wut')) {
     postMessage(confusedNickYoung);
+  }
+
+  // Post margarita meme if anyone mentions margs
+  if (request.text.toLowerCase().includes('margs')) {
+    postMessage(margaritaImage);
   }
 
   // Verify there is text in the message (not an image or blank)
@@ -110,6 +121,9 @@ function parse() {
         break;
       case jenkinsCommand:
         postMessage(butlerJokes[Math.floor(Math.random() * butlerJokes.length)]);
+        break;
+      case gitCommit:
+        getGitCommit();
         break;
       case mitchEasterEgg:
         postMessage(mitchFace);
@@ -194,6 +208,28 @@ function letMeGoogleThatForYou(textToGoogle) {
   var lmgtfyURL = 'http://lmgtfy.com/?q=' + encodeQuery(textToGoogle);
 
   postMessage(lmgtfyURL);
+}
+
+// Get a random git commit from url
+function getGitCommit() {
+  options = {
+    hostname: 'whatthecommit.com',
+    path: '/index.txt'
+  };
+
+  var callback = function(response) {
+    var str = '';
+
+    response.on('data', function(chunk){
+      str += chunk;
+    });
+
+    response.on('end', function(){
+      postMessage(str);
+    });
+  }
+
+  HTTP.request(options, callback).end();
 }
 
 // Generate random integer between 0 and input param
