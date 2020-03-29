@@ -21,7 +21,6 @@ var lmgtfyCommand = '/lmgtfy';
 var xkcdCommand = '/xkcd';
 var gitCommit = '/commit';
 var wolframCommand = '/wolf';
-var jenkinsCommand = '/jenkins';
 var clearCommand = '/clear';
 var allCommand = '/all';
 var mitchEasterEgg = '/mitch';
@@ -94,6 +93,11 @@ function parse() {
     postMessage(margaritaImage);
   }
 
+  // Post Butler quote if anyone says 'jenkins' in the chat
+  if (request.text.toLowerCase().includes('jenkin')) {
+    postMessage(butlerJokes[Math.floor(Math.random() * butlerJokes.length)]);
+  }
+
   // Verify there is text in the message (not an image or blank)
   else if (request.text){
     // Grab only first word of the request
@@ -133,9 +137,6 @@ function parse() {
         break;
       case allCommand:
         // Not yet implemented, need a database of active user ID's up first
-        break;
-      case jenkinsCommand:
-        postMessage(butlerJokes[Math.floor(Math.random() * butlerJokes.length)]);
         break;
       case gitCommit:
         getGitCommit();
