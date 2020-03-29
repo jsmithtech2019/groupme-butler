@@ -268,8 +268,8 @@ function atAll() {
 
       // Get all the names in a list with @ symbol, also get all ID nums in same order
       for(var i = 0; i < obj.response.members.length; i++){
-        loci = loci + '[' + loci_count + ',' + obj.response.members[i].nickname.length + '],';
-        loci_count = loci_count + obj.response.members[i].nickname.length + 1;
+        loci = loci + '[' + loci_count + ',' + obj.response.members[i].name.length + '],';
+        loci_count = loci_count + obj.response.members[i].name.length + 1;
         user_ids = user_ids + '"' + obj.response.members[i].user_id + '",';
         text = text + '@' + obj.response.members[i].name + ' ';
       }
