@@ -91,11 +91,6 @@ function parse() {
     postMessage(confusedNickYoung);
   }
 
-  // Post Mitch if anyone says 'mitch' in the chat
-  if (request.text.toLowerCase().includes('mitch')) {
-    postMessage(mitchFace);
-  }
-
   // Post margarita meme if anyone mentions margs
   if (request.text.toLowerCase().includes('margs')) {
     postMessage(margaritaImage);
@@ -145,6 +140,9 @@ function parse() {
         break;
       case allCommand:
         atAll();
+        break;
+      case mitchEasterEgg:
+        postMessage(mitchFace);
         break;
       case gitCommit:
         getGitCommit();
