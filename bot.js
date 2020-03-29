@@ -7,7 +7,11 @@ var HTTP = require('http');
 // The Groupme bot that is running this application
 var botID = process.env.GROUPME_BOT_ID;
 
+// My groupme token to index the group members for @all
 var groupmeToken = process.env.MY_GROUPME_TOKEN;
+
+// ID of the group the bot is running in for @all
+var groupId = process.env.GROUPME_GROUP_ID;
 
 // API key for Giphy
 var apiKey = process.env.GIPHY_API_KEY;
@@ -258,7 +262,7 @@ function atAll() {
   var loci = '"loci":[';
   var user_ids = '],"type":"mentions","user_ids":[';
 
-  request.get('https://api.groupme.com/v3/groups/35310029?token=' + groupmeToken).then(res =>{
+  request.get('https://api.groupme.com/v3/groups/' + GROUPME_GROUP_ID +'?token=' + groupmeToken).then(res =>{
     const obj = JSON.parse(res.text);
 
     // Get all the names in a list with @ symbol, also get all ID nums in same order
