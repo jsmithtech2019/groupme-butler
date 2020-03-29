@@ -286,18 +286,12 @@ function atAll() {
 
       console.log('Using JSON payload: ' + jsonPayload);
 
-      var options = {
-        uri: 'https://api.groupme.com/v3/groups/35310029/messages?token=' + groupmeToken,
-        method: 'POST',
-        headers: {'content-type' : 'application/json'},
-        json: jsonPayload
-      };
-
-      request(options, function (error, response, body) {
-        if (!error && response.statusCode == 200 || response.statusCode == 202) {
-          console.log(body)
-        }
-      });
+      request.post('https://api.groupme.com/v3/groups/35310029/messages?token=' + groupmeToken)
+        .set('Content-Type', 'application/json')
+        .send(jsonPayload)
+        .then(res =>{
+          console.log(res.text);
+        });
     });
   });
 }
