@@ -7,6 +7,8 @@ var HTTP = require('http');
 // The Groupme bot that is running this application
 var botID = process.env.GROUPME_BOT_ID;
 
+var groupmeToken = process.env.MY_GROUPME_TOKEN;
+
 // API key for Giphy
 var apiKey = process.env.GIPHY_API_KEY;
 
@@ -54,6 +56,7 @@ var butlerJokes =   ['You rang sir?',
 // Help message for bot usage
 var helpMessage = 'Usage instructions for your Butler:\n\
   "/help"     Posts this help message.\n\
+  "/all"      Tags all members of the chat.\n\
   "/giphy"   Posts a relevant Gif.\n\
   "/xkcd"    Finds a relevant XKCD comic.\n\
   "/clear"   Clears the chat history.\n\
@@ -86,6 +89,11 @@ function parse() {
   // Post Confused Nick Young if anyone says 'wut' in the chat
   if (request.text.toLowerCase().includes('wut')) {
     postMessage(confusedNickYoung);
+  }
+
+  // Post Mitch if anyone says 'mitch' in the chat
+  if (request.text.toLowerCase().includes('mitch')) {
+    postMessage(mitchFace);
   }
 
   // Post margarita meme if anyone mentions margs
@@ -136,13 +144,10 @@ function parse() {
         postMessage(" \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChat cleared.");
         break;
       case allCommand:
-        // Not yet implemented, need a database of active user ID's up first
+        atAll();
         break;
       case gitCommit:
         getGitCommit();
-        break;
-      case mitchEasterEgg:
-        postMessage(mitchFace);
         break;
     }
   }
@@ -248,6 +253,55 @@ function getGitCommit() {
   HTTP.request(options, callback).end();
 }
 
+// Tag all members of the chat
+function atAll() {
+  const request = require('superagent');
+  var text = '{"message":{"source_guid":"';
+  var attachments = '';
+  var loci = '"loci":[';
+  var loci_count = 0;
+  var user_ids = '],"type":"mentions","user_ids":[';
+
+  request.get('https://api.groupme.com/v3/groups/35310029?token=' + MY_GROUPME_TOKEN).then(res =>{
+    const obj = JSON.parse(res.text);
+
+    request.get('https://www.uuidgenerator.net/api/version4').then(res => {
+      text = text + res.text.substring(0, res.text.length - 2) + '","text":"';
+
+      // Get all the names in a list with @ symbol, also get all ID nums in same order
+      for(var i = 0; i < obj.response.members.length; i++){
+        loci = loci + '[' + loci_count + ',' + obj.response.members[i].nickname.length + '],';
+        loci_count = loci_count + obj.response.members[i].nickname.length + 1;
+        user_ids = user_ids + '"' + obj.response.members[i].user_id + '",';
+        text = text + '@' + obj.response.members[i].name + ' ';
+      }
+      // Drop extra space
+      text = text.substring(0, text.length - 1);
+
+      // Add loci string and user ids plus ending to the text
+      text = text + '","attachments":[{' + loci.substring(0, loci.length - 1) + user_ids.substring(0, user_ids.length - 1) + ']}]}}';
+
+      // Parse into a JSON object
+      var jsonPayload = JSON.parse(text);
+
+      console.log('Using JSON payload: ' + jsonPayload);
+
+      var options = {
+        uri: 'https://api.groupme.com/v3/bots/post',
+        method: 'POST',
+        headers: {'content-type' : 'application/json'},
+        json: jsonPayload
+      };
+
+      request(options, function (error, response, body) {
+        if (!error && response.statusCode == 200 || response.statusCode == 202) {
+          console.log(body)
+        }
+      });
+    });
+  });
+}
+
 // Generate random integer between 0 and input param
 function random_int(max) {
   return Math.floor(Math.random() * (max - 0) + 0);
@@ -266,8 +320,6 @@ function postMessage(message) {
     hostname: 'api.groupme.com',
     path: '/v3/bots/post',
     method: 'POST'
-    // For tagging changes
-    //args
   };
 
   body = {
