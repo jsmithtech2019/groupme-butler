@@ -287,7 +287,7 @@ function atAll() {
       console.log('Using JSON payload: ' + jsonPayload);
 
       var options = {
-        uri: 'https://api.groupme.com/v3/bots/post',
+        uri: 'https://api.groupme.com/v3/groups/35310029/messages?token=' + groupmeToken,
         method: 'POST',
         headers: {'content-type' : 'application/json'},
         json: jsonPayload
