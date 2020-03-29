@@ -28,14 +28,29 @@ var mitchEasterEgg = '/mitch';
 var margEasterEgg = 'margs';
 
 // Array of different butler statements
-var butlerJokes = ['You rang sir?',
+var butlerJokes =   ['You rang sir?',
                      'Those who choose to be servants know the most about being free.',
                      'Am I really the only servant here?',
                      'You can\'t unfry an egg, sir.',
-                     'Who employees butlers anymore?',
+                     'Who employs butlers anymore?',
                      'I see nothing, I hear nothing, I only serve.',
                      'Good evening, Colonel. Can I give you a lift?',
-                     'You are not authorized to access this area.'];
+                     'You are not authorized to access this area.',
+                     'As far as I\'m concerned, \'whom\' is a word that was invented to make everyone sound like a butler.',
+                     'Ah, the patter of little feet around the house. There\'s nothing like having a midget for a butler.',
+                     'Wives in their husbands\' absences grow subtler, And daughters sometimes run off with the butler.',
+                     'I think I\'d take a human butler over a robot one.',
+                     'I went back-to-back from \'AI\' to \'Butler,\' literally with no break.',
+                     'I\'m simply one hell of a butler.',
+                     'It was no time for mercy, it was time to terminate with extreme prejudice.',
+                     'The thing about a diversion is that it has to be diverting.',
+                     'Jenkins, of course, is a gentleman’s gentlemen, not a butler, but if the call comes, he can buttle with the best of them.',
+                     'There are few greater pleasures in life than a devoted butler.',
+                     'A good butler should save his employer\'s life at least once a day.',
+                     'Never pass up new experiences, they enrich the mind.',
+                     'No one is a hero to their butler.',
+                     'Very good, Sir',
+                     'That\'s the sort of special touch that a butler always adds'];
 
 // Help message for bot usage
 var helpMessage = 'Usage instructions for your Butler:\n\
