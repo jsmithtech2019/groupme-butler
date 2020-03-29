@@ -254,8 +254,7 @@ function getGitCommit() {
 // Tag all members of the chat
 function atAll() {
   const request = require('superagent');
-  var text = '{"message":{"source_guid":"';
-  var attachments = '';
+  var text = '{"bot_id":"' + botID + '","text":"';
   var loci = '"loci":[';
   var loci_count = 0;
   var user_ids = '],"type":"mentions","user_ids":[';
@@ -264,7 +263,6 @@ function atAll() {
     const obj = JSON.parse(res.text);
 
     request.get('https://www.uuidgenerator.net/api/version4').then(res => {
-      text = text + res.text.substring(0, res.text.length - 2) + '","text":"';
 
       // Get all the names in a list with @ symbol, also get all ID nums in same order
       for(var i = 0; i < obj.response.members.length; i++){
@@ -277,18 +275,23 @@ function atAll() {
       text = text.substring(0, text.length - 1);
 
       // Add loci string and user ids plus ending to the text
-      text = text + '","attachments":[{' + loci.substring(0, loci.length - 1) + user_ids.substring(0, user_ids.length - 1) + ']}]}}';
+      text = text + '","attachments":[{' + loci.substring(0, loci.length - 1) + user_ids.substring(0, user_ids.length - 1) + ']}]}';
 
       // Parse into a JSON object
       var jsonPayload = JSON.parse(text);
 
       console.log('Using JSON payload: ' + jsonPayload);
 
-      request.post('https://api.groupme.com/v3/groups/35310029/messages?token=' + groupmeToken)
+      request.post('https://api.groupme.com/v3/bots/post')
         .set('Content-Type', 'application/json')
         .send(jsonPayload)
         .then(res =>{
-          console.log(res.text);
+          if(res.statusCode == 202) {
+            console.log('202 response');
+          } else {
+            console.log('Rejected with code: ' + res.statusCode);
+            console.log('Response was: ' + res.text);
+          }
         });
     });
   });
