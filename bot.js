@@ -262,7 +262,7 @@ function atAll() {
   var loci = '"loci":[';
   var user_ids = '],"type":"mentions","user_ids":[';
 
-  request.get('https://api.groupme.com/v3/groups/' + GROUPME_GROUP_ID +'?token=' + groupmeToken).then(res =>{
+  request.get('https://api.groupme.com/v3/groups/' + groupId +'?token=' + groupmeToken).then(res =>{
     const obj = JSON.parse(res.text);
 
     // Get all the names in a list with @ symbol, also get all ID nums in same order
