@@ -262,7 +262,7 @@ function atAll() {
   var loci_count = 0;
   var user_ids = '],"type":"mentions","user_ids":[';
 
-  request.get('https://api.groupme.com/v3/groups/35310029?token=' + MY_GROUPME_TOKEN).then(res =>{
+  request.get('https://api.groupme.com/v3/groups/35310029?token=' + groupmeToken).then(res =>{
     const obj = JSON.parse(res.text);
 
     request.get('https://www.uuidgenerator.net/api/version4').then(res => {
